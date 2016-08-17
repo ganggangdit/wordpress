@@ -86,7 +86,7 @@ abstract class Ai1wm_Database {
 	 * @access protected
 	 * @var array
 	 */
-	protected $table_prefix_columns   = array();
+	protected $table_prefix_columns = array();
 
 	/**
 	 * Include table prefixes
@@ -103,6 +103,14 @@ abstract class Ai1wm_Database {
 	 * @var array
 	 */
 	protected $exclude_table_prefixes = array();
+
+	/**
+	 * Number of serialized replaces
+	 *
+	 * @access protected
+	 * @var int
+	 */
+	protected $number_of_replaces = 0;
 
 	/**
 	 * Constructor
@@ -215,14 +223,12 @@ abstract class Ai1wm_Database {
 	 * Get table query clauses
 	 *
 	 * @param  string $table Table name
-	 * @return array
+	 * @return mixed
 	 */
 	public function get_table_query_clauses( $table ) {
 		if ( isset( $this->table_query_clauses[ strtolower( $table ) ] ) ) {
 			return $this->table_query_clauses[ strtolower( $table ) ];
 		}
-
-		return array();
 	}
 
 	/**
@@ -244,14 +250,12 @@ abstract class Ai1wm_Database {
 	 * Get table prefix columns
 	 *
 	 * @param  string $table Table name
-	 * @return array
+	 * @return mixed
 	 */
 	public function get_table_prefix_columns( $table ) {
 		if ( isset( $this->table_prefix_columns[ strtolower( $table ) ] ) ) {
 			return $this->table_prefix_columns[ strtolower( $table ) ];
 		}
-
-		return array();
 	}
 
 	/**
@@ -358,142 +362,163 @@ abstract class Ai1wm_Database {
 	/**
 	 * Export database into a file
 	 *
-	 * @param  string $file_name Name of file
+	 * @param  string $file_name            Name of file
+	 * @param  string $current_table_index  Current table index
+	 * @param  int    $current_table_offset Current table offset
+	 * @param  int    $timeout              Process timeout
 	 * @return bool
 	 */
-	public function export( $file_name ) {
+	public function export( $file_name, &$current_table_index = 0, &$current_table_offset = 0, $timeout = 0 ) {
 
 		// Set file handler
-		$file_handler = fopen( $file_name, 'wb' );
+		$file_handler = fopen( $file_name, 'ab' );
 		if ( $file_handler === false ) {
 			throw new Exception( 'Unable to open database file' );
 		}
 
 		// Write headers
-		if ( fwrite( $file_handler, $this->get_header() ) === false ) {
-			throw new Exception( 'Unable to write database header information' );
+		if ( $current_table_index === 0 ) {
+			if ( fwrite( $file_handler, $this->get_header() ) === false ) {
+				throw new Exception( 'Unable to write database header information' );
+			}
 		}
 
+		// Start time
+		$start = microtime( true );
+
+		// Flag to hold if all tables have been processed
+		$completed = true;
+
+		// Get tables
+		$tables = $this->get_tables();
+
 		// Export tables
-		foreach ( $this->get_tables() as $table_name ) {
+		for ( ; $current_table_index < count( $tables ); $current_table_index++ ) {
+
+			// Get table name
+			$table_name = $tables[ $current_table_index ];
 
 			// Replace table name prefixes
 			$new_table_name = $this->replace_table_prefixes( $table_name, 0 );
 
-			// Get table structure
-			$structure = $this->query( "SHOW CREATE TABLE `$table_name`" );
-			$table = $this->fetch_assoc( $structure );
+			// Do not insert table schema if we have current table offset
+			if ( empty( $current_table_offset ) ) {
 
-			// Close structure cursor
-			$this->free_result( $structure );
+				// Get table structure
+				$structure = $this->query( "SHOW CREATE TABLE `$table_name`" );
+				$table = $this->fetch_assoc( $structure );
 
-			// Get create table
-			if ( isset( $table['Create Table'] ) ) {
+				// Close structure cursor
+				$this->free_result( $structure );
 
-				// Write table drop statement
-				$drop_table = "DROP TABLE IF EXISTS `$new_table_name`;\n";
+				// Get create table
+				if ( isset( $table['Create Table'] ) ) {
 
-				// Write table statement
-				if ( fwrite( $file_handler, $drop_table ) === false ) {
-					throw new Exception( 'Unable to write database table statement' );
-				}
+					// Write table drop statement
+					$drop_table = "\nDROP TABLE IF EXISTS `$new_table_name`;\n";
 
-				// Replace create table prefixes
-				$create_table = $this->replace_table_prefixes( $table['Create Table'], 14 );
-
-				// Strip table constraints
-				$create_table = $this->strip_table_constraints( $create_table );
-
-				// Write table structure
-				if ( fwrite( $file_handler, $create_table ) === false ) {
-					throw new Exception( 'Unable to write database table structure' );
-				}
-
-				// Write end of statement
-				if ( fwrite( $file_handler, ";\n\n" ) === false ) {
-					throw new Exception( 'Unable to write database end of statement' );
-				}
-
-				// Set query
-				$query = "SELECT * FROM `$table_name` ";
-
-				// Apply additional table query clauses
-				if ( ( $query_clauses = $this->get_table_query_clauses( $table_name ) ) ) {
-					$query .= $query_clauses;
-				}
-
-				// Apply additional table prefix columns
-				$columns = $this->get_table_prefix_columns( $table_name );
-
-				// Get results
-				$result = $this->query( $query );
-
-				$processed_rows = 0;
-
-				// Generate insert statements
-				while ( $row = $this->fetch_assoc( $result ) ) {
-					if ( $processed_rows === 0 ) {
-						// Write start transaction
-						if ( fwrite( $file_handler, "START TRANSACTION;\n" ) === false ) {
-							throw new Exception( 'Unable to write database start transaction' );
-						}
+					// Write table statement
+					if ( fwrite( $file_handler, $drop_table ) === false ) {
+						throw new Exception( 'Unable to write database table statement' );
 					}
 
-					$items = array();
-					foreach ( $row as $key => $value ) {
-						// Replace table prefix columns
-						if ( isset( $columns[ strtolower( $key ) ] ) ) {
-							$value = $this->replace_table_prefixes( $value, 0 );
-						}
+					// Replace create table prefixes
+					$create_table = $this->replace_table_prefixes( $table['Create Table'], 14 );
 
-						// Replace table values
-						$items[] = is_null( $value ) ? 'NULL' : $this->quote( $this->replace_table_values( $value ) );
+					// Strip table constraints
+					$create_table = $this->strip_table_constraints( $create_table );
+
+					// Write table structure
+					if ( fwrite( $file_handler, $create_table ) === false ) {
+						throw new Exception( 'Unable to write database table structure' );
 					}
 
-					// Set table values
-					$table_values = implode( ',', $items );
-
-					// Set insert statement
-					$table_insert = "INSERT INTO `$new_table_name` VALUES ($table_values);\n";
-
-					// Write insert statement
-					if ( fwrite( $file_handler, $table_insert ) === false ) {
-						throw new Exception( 'Unable to write database insert statement' );
-					}
-
-					$processed_rows++;
-
-					// Write end of transaction
-					if ( $processed_rows === Ai1wm_Database::QUERIES_PER_TRANSACTION ) {
-						if (fwrite( $file_handler, "COMMIT;\n" ) === false ) {
-							throw new Exception( 'Unable to write database end of transaction' );
-						}
-
-						$processed_rows = 0;
+					// Write end of statement
+					if ( fwrite( $file_handler, ";\n\n" ) === false ) {
+						throw new Exception( 'Unable to write database end of statement' );
 					}
 				}
+			}
+
+			// Set query
+			$query = sprintf( "SELECT * FROM `$table_name` %s ORDER BY 1 ASC LIMIT {$current_table_offset}, 2147483647", $this->get_table_query_clauses( $table_name ) );
+
+			// Apply additional table prefix columns
+			$columns = $this->get_table_prefix_columns( $table_name );
+
+			// Get results
+			$result = $this->query( $query );
+
+			// Generate insert statements
+			while ( $row = $this->fetch_assoc( $result ) ) {
+				if ( $current_table_offset % Ai1wm_Database::QUERIES_PER_TRANSACTION === 0 ) {
+					// Write start transaction
+					if ( fwrite( $file_handler, "START TRANSACTION;\n" ) === false ) {
+						throw new Exception( 'Unable to write database start transaction' );
+					}
+				}
+
+				$items = array();
+				foreach ( $row as $key => $value ) {
+					// Replace table prefix columns
+					if ( isset( $columns[ strtolower( $key ) ] ) ) {
+						$value = $this->replace_table_prefixes( $value, 0 );
+					}
+
+					// Replace table values
+					$items[] = is_null( $value ) ? 'NULL' : $this->quote( $this->replace_table_values( $value ) );
+				}
+
+				// Set table values
+				$table_values = implode( ',', $items );
+
+				// Set insert statement
+				$table_insert = "INSERT INTO `$new_table_name` VALUES ($table_values);\n";
+
+				// Write insert statement
+				if ( fwrite( $file_handler, $table_insert ) === false ) {
+					throw new Exception( 'Unable to write database insert statement' );
+				}
+
+				$current_table_offset++;
 
 				// Write end of transaction
-				if ( $processed_rows !== 0 ) {
+				if ( $current_table_offset % Ai1wm_Database::QUERIES_PER_TRANSACTION === 0 ) {
 					if ( fwrite( $file_handler, "COMMIT;\n" ) === false ) {
 						throw new Exception( 'Unable to write database end of transaction' );
 					}
 				}
 
-				// Write end of statements
-				if ( fwrite( $file_handler, "\n" ) === false ) {
-					throw new Exception( 'Unable to write database end of statement' );
+				// Time elapsed
+				if ( $timeout ) {
+					if ( ( microtime( true ) - $start ) > $timeout ) {
+						$completed = false;
+						break;
+					}
+				}
+			}
+
+			// Close result cursor
+			$this->free_result( $result );
+
+			// Write end of transaction
+			if ( $completed ) {
+				if ( $current_table_offset % Ai1wm_Database::QUERIES_PER_TRANSACTION !== 0 ) {
+					if ( fwrite( $file_handler, "COMMIT;\n" ) === false ) {
+						throw new Exception( 'Unable to write database end of transaction' );
+					}
 				}
 
-				// Close result cursor
-				$this->free_result( $result );
+				$current_table_offset = 0;
+			} else {
+				break;
 			}
 		}
 
 		// Close file handler
 		fclose( $file_handler );
 
-		return true;
+		return $completed;
 	}
 
 	/**
@@ -608,9 +633,9 @@ abstract class Ai1wm_Database {
 	}
 
 	/**
-	 * Get MySQL max allowed packaet
+	 * Get MySQL max allowed packet
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	protected function get_max_allowed_packet() {
 		$max_allowed_packet = null;
@@ -729,14 +754,14 @@ abstract class Ai1wm_Database {
 		$string = '(s:\d+:".*?")';
 		$object = '(O:\d+:".+":\d+:{.*})';
 
-		// Number of replaces
-		$count = 0;
+		// Number of serialized replaces
+		$this->number_of_replaces = 0;
 
 		// Replace serialized values
-		$input = preg_replace_callback( "/'($array|$string|$object)'/", array( $this, 'replace_serialized_values' ), $input, -1, $count );
+		$input = preg_replace_callback( "/'($array|$string|$object)'/", array( $this, 'replace_serialized_values' ), $input );
 
 		// Replace values
-		if ( $count === 0 ) {
+		if ( $this->number_of_replaces === 0 ) {
 			$input = Ai1wm_Database_Utility::replace_values( $old_values, $new_values, $input );
 		}
 
@@ -750,6 +775,8 @@ abstract class Ai1wm_Database {
 	 * @return string
 	 */
 	protected function replace_serialized_values( $matches ) {
+		$this->number_of_replaces++;
+
 		// Unescape MySQL special characters
 		$input = Ai1wm_Database_Utility::unescape_mysql( $matches[1] );
 
@@ -799,7 +826,7 @@ abstract class Ai1wm_Database {
 			"-- Host: %s\n" .
 			"-- Database: %s\n" .
 			"-- Class: %s\n" .
-			"--\n\n",
+			"--\n",
 			$this->wpdb->dbhost,
 			$this->wpdb->dbname,
 			get_class( $this )
