@@ -37,6 +37,8 @@ define('DB_CHARSET', 'utf8');
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
 
+define('CONCATENATE_SCRIPTS', false); //解决无法点击图片上传上传
+
 /**#@+
  * Authentication Unique Keys and Salts.
  *
