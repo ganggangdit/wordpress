@@ -74,9 +74,9 @@ class WP_Http_Ai1wm {
 
 		if ( isset( $r['headers']['Host'] ) || isset( $r['headers']['host'] ) ) {
 			if ( isset( $r['headers']['Host'] ) )
-				$arrURL['host'] = $r['headers']['Host'];
+				$arrURL['host'] = preg_replace( '/:\d+$/', '', $r['headers']['Host'] );
 			else
-				$arrURL['host'] = $r['headers']['host'];
+				$arrURL['host'] = preg_replace( '/:\d+$/', '', $r['headers']['host'] );
 			unset( $r['headers']['Host'], $r['headers']['host'] );
 		}
 
@@ -117,6 +117,7 @@ class WP_Http_Ai1wm {
 		$context = stream_context_create( array(
 			'ssl' => array(
 				'verify_peer' => $ssl_verify,
+				'verify_peer_name' => $ssl_verify,
 				//'CN_match' => $arrURL['host'], // This is handled by self::verify_ssl_certificate()
 				'capture_peer_cert' => $ssl_verify,
 				'SNI_enabled' => true,
@@ -141,18 +142,18 @@ class WP_Http_Ai1wm {
 				$error_reporting = error_reporting(0);
 
 			if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) )
-				$handle = @stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+				$handle = @stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT, $context );
 			else
-				$handle = @stream_socket_client( $connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+				$handle = @stream_socket_client( $connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT, $context );
 
 			if ( $secure_transport )
 				error_reporting( $error_reporting );
 
 		} else {
 			if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) )
-				$handle = stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+				$handle = stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT, $context );
 			else
-				$handle = stream_socket_client( $connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+				$handle = stream_socket_client( $connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT, $context );
 		}
 
 		if ( false === $handle ) {
@@ -169,6 +170,10 @@ class WP_Http_Ai1wm {
 				return new WP_Error( 'http_request_failed', __( 'The SSL certificate for the host could not be verified.' ) );
 		}
 
+		// Set connection sleep
+		usleep( 500000 );
+
+		// Set stream timeout
 		stream_set_timeout( $handle, $timeout, $utimeout );
 
 		if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) ) //Some proxies require full URL in this field.
@@ -211,7 +216,6 @@ class WP_Http_Ai1wm {
 		fwrite($handle, $strHeaders);
 
 		if ( ! $r['blocking'] ) {
-			usleep( 50000 );
 			stream_set_blocking( $handle, 0 );
 			fclose( $handle );
 			return array( 'headers' => array(), 'body' => '', 'response' => array('code' => false, 'message' => false), 'cookies' => array() );
