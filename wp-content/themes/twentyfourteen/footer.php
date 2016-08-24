@@ -21,6 +21,7 @@
 				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentyfourteen' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'twentyfourteen' ), 'WordPress' ); ?></a>
 			</div><!-- .site-info -->
 		</footer><!-- #colophon -->
+<p>wangg14</p>
 	</div><!-- #page -->
 
 	<?php wp_footer(); ?>

@@ -51,6 +51,7 @@
 				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentysixteen' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'twentysixteen' ), 'WordPress' ); ?></a>
 			</div><!-- .site-info -->
 		</footer><!-- .site-footer -->
+    <p>16</p>
 	</div><!-- .site-inner -->
 </div><!-- .site -->
 
