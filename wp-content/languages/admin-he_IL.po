@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Administration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2016-08-16 20:05:40+0000\n"
+"PO-Revision-Date: 2016-08-22 14:57:26+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1080,12 +1080,12 @@ msgstr "מבנה קישורים יכול להכיל מידע שימושי כגו
 #. translators: %s: Codex URL
 #: wp-admin/setup-config.php:170
 msgid "Need more help? <a href=\"%s\">We got it</a>."
-msgstr "צריכים עזרה נוספת? <a href=\"%s\">לחצו לקבלת עזרה</a>."
+msgstr "צריכים עזרה נוספת? <a href=\"%s\">לחצו כאן לקבלת עזרה</a>."
 
 #. translators: %s: localhost
 #: wp-admin/setup-config.php:210
 msgid "You should be able to get this info from your web host, if %s doesn&#8217;t work."
-msgstr "אם %s לא עובד, צרו קשר עם חברת האחסון."
+msgstr "אם %s לא עובד, יש ליצור קשר עם חברת האחסון."
 
 #. translators: %s: wp-config.php
 #: wp-admin/setup-config.php:363

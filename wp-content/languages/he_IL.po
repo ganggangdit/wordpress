@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the 4.6.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2016-08-10 23:44:51+0000\n"
+"PO-Revision-Date: 2016-08-23 18:26:27+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1082,7 +1082,7 @@ msgstr "%1$s (מוורדפרס %2$s; השתמשו בפונקציה %3$s)"
 
 #: wp-includes/rest-api/class-wp-rest-server.php:1012
 msgid "The specified namespace could not be found."
-msgstr "ה-namespace הספציפי הזה לא נמצא."
+msgstr "לא ניתן למצוא את ה-namespace הספציפי הזה."
 
 #: wp-includes/rest-api/class-wp-rest-server.php:924
 msgid "No route was found matching the URL and request method"
@@ -1385,15 +1385,15 @@ msgstr "%1$s לא קיים יותר. יש להשתמש ב-%2$s."
 msgid "Sorry, you are not allowed to edit theme options on this site."
 msgstr "אין לך הרשאות לערוך אפשרויות תבנית באתר זה."
 
-#: wp-includes/class-wp-customize-manager.php:384
-msgid "You must be logged in to complete this action."
-msgstr "אתה חייב להיות מחובר כדי להשלים פעולה זו."
-
 #. translators: 1: post type, 2: capability name
 #: wp-includes/capabilities.php:73 wp-includes/capabilities.php:134
 #: wp-includes/capabilities.php:193 wp-includes/capabilities.php:230
 msgid "The post type %1$s is not registered, so it may not be reliable to check the capability \"%2$s\" against a post of that type."
 msgstr "לא נרשמו תכנים מסוג %1$s, לכן לא ניתן לבדוק יכולות מסוג \"%2$s\" כנגד סוגי תוכן אלה."
+
+#: wp-includes/class-wp-customize-manager.php:384
+msgid "You must be logged in to complete this action."
+msgstr "יש להתחבר כדי להשלים פעולה זו."
 
 #: wp-includes/class-wp-customize-nav-menus.php:770
 msgid "Clear Results"
@@ -2018,7 +2018,7 @@ msgstr "ליצור תפריט"
 
 #: wp-includes/customize/class-wp-customize-nav-menu-item-control.php:137
 msgid "Original: %s"
-msgstr "מקורי %s"
+msgstr "מקורי: %s"
 
 #: wp-includes/customize/class-wp-customize-nav-menu-item-control.php:130
 msgid "The description will be displayed in the menu if the current theme supports it."
@@ -3660,10 +3660,6 @@ msgstr "הוספת תגית קרא עוד"
 msgid "Special character"
 msgstr "תווים מיוחדים"
 
-#: wp-includes/class-wp-editor.php:945
-msgid "Could not find the specified string."
-msgstr "המחרוזת שצוינה לא נמצאה."
-
 #: wp-includes/class-wp-editor.php:1041
 msgid "Toolbar Toggle"
 msgstr "סרגל כלים מורחב"
@@ -3808,6 +3804,10 @@ msgstr "התאמת גודל אותיות"
 #: wp-includes/script-loader.php:683 wp-includes/script-loader.php:707
 msgid "An error has occurred. Please reload the page and try again."
 msgstr "ארעה שגיאה. טען מחדש את העמוד ונסה שנית."
+
+#: wp-includes/class-wp-editor.php:945
+msgid "Could not find the specified string."
+msgstr "לא ניתן למצוא את המחרוזת שצוינה."
 
 #: wp-includes/general-template.php:3397
 msgctxt "admin color scheme"
@@ -4095,15 +4095,15 @@ msgstr "פג תוקף ה-Session. ניתן להתחבר שוב מהעמוד הז
 msgid "Have you entered your email correctly? You have entered %s, if it&#8217;s incorrect, you will not receive your email."
 msgstr "האם כתובת המייל שהזנת תקינה? הזנת %s, אם היא לא תקינה, לא תקבל מייל."
 
-#. translators: 1: month, 2: day, 3: year, 4: hour, 5: minute
-#: wp-includes/script-loader.php:536 wp-includes/script-loader.php:575
-msgid "%1$s %2$s, %3$s @ %4$s:%5$s"
-msgstr "%2$s ב%1$s, %3$s בשעה %4$s : %5$s"
-
 #. translators: %s: site address
 #: wp-signup.php:880
 msgid "The site you were looking for, %s, does not exist, but you can create it now!"
 msgstr "האתר שחיפשת, %s, אינו קיים, אבל אתה יכול ליצור אותו עכשיו!"
+
+#. translators: 1: month, 2: day, 3: year, 4: hour, 5: minute
+#: wp-includes/script-loader.php:536 wp-includes/script-loader.php:575
+msgid "%1$s %2$s, %3$s @ %4$s:%5$s"
+msgstr "%2$s ב%1$s, %3$s בשעה %4$s:%5$s"
 
 #: wp-includes/functions.php:5135
 msgid "The login page will open in a new window. After logging in you can close it and return to this page."
@@ -4114,7 +4114,7 @@ msgstr "עמוד ההתחברות יפתח בחלונית חדשה. אחרי ה�
 #: wp-includes/post-template.php:1681
 msgctxt "post revision title"
 msgid "%1$s %2$s, %3$s ago (%4$s)"
-msgstr "%1$s %2$s,לפני %3$s (%4$s)"
+msgstr "%1$s %2$s, לפני %3$s (%4$s)"
 
 #: wp-includes/class-walker-comment.php:328
 msgid "%s <span class=\"says\">says:</span>"
@@ -4817,10 +4817,6 @@ msgstr "אין לך הרשאות לשייך פריטים לטקסונומיה ז
 msgid "This taxonomy is not hierarchical."
 msgstr "הטקסונומיה איננה היררכית."
 
-#: wp-includes/class-wp-xmlrpc-server.php:1920
-msgid "Sorry, your term could not be created. Something wrong happened."
-msgstr "לא ניתן ליצור את הפריט."
-
 #: wp-includes/class-wp-xmlrpc-server.php:1429
 #: wp-includes/class-wp-xmlrpc-server.php:1981
 #: wp-includes/class-wp-xmlrpc-server.php:2072
@@ -4858,6 +4854,10 @@ msgstr "הורה לא קיים."
 #: wp-includes/class-wp-xmlrpc-server.php:1992
 msgid "This taxonomy is not hierarchical so you can't set a parent."
 msgstr "הטקסונומיה איננה היררכיית, לכן לא ניתן להגדיר לה הורה."
+
+#: wp-includes/class-wp-xmlrpc-server.php:1920
+msgid "Sorry, your term could not be created. Something wrong happened."
+msgstr "לא ניתן ליצור את מונח. ארעה תקלה."
 
 #: wp-includes/widgets/class-wp-widget-links.php:131
 msgid "Select Link Category:"
@@ -5194,7 +5194,7 @@ msgstr "<strong>שגיאה</strong>: נא להזין אימייל תקין."
 
 #: wp-includes/script-loader.php:712
 msgid "Could not load the preview image. Please reload the page and try again."
-msgstr "אין אפשרות לטעון את התצוגה המקדימה של התמונה. יש לטעון מחדש את הדף ולנסות שנית."
+msgstr "לא ניתן לטעון את התצוגה המקדימה של התמונה. יש לטעון מחדש את הדף ולנסות שנית."
 
 #: wp-includes/ms-deprecated.php:398
 msgid "<strong>ERROR</strong>: Site URL already taken."
@@ -5899,10 +5899,6 @@ msgstr ""
 "\n"
 "%s"
 
-#: wp-includes/ms-functions.php:1118
-msgid "Could not create site."
-msgstr "לא הצלחתי לפתוח את האתר."
-
 #: wp-includes/ms-functions.php:1201
 msgid "New Site Registration: %s"
 msgstr "אתר חדש: %s"
@@ -5946,6 +5942,10 @@ msgstr "האתר כבר הופעל."
 #: wp-includes/class-wp-xmlrpc-server.php:4018
 msgid "Sorry, you are not allowed access to details about this site."
 msgstr "אין לך הרשאות לראות פרטים על אתר זה."
+
+#: wp-includes/ms-functions.php:1118
+msgid "Could not create site."
+msgstr "לא ניתן ליצור את האתר."
 
 #: wp-includes/ms-load.php:114
 msgid "This site has been archived or suspended."
@@ -6280,10 +6280,6 @@ msgstr "הפוסט לא קיים."
 msgid "Sorry, the new category failed."
 msgstr "יצירת הקטגוריה נכשלה."
 
-#: wp-includes/class-wp-xmlrpc-server.php:3474
-msgid "Sorry, the comment could not be edited. Something wrong happened."
-msgstr "עריכת התגובה נכשלה."
-
 #: wp-includes/class-wp-xmlrpc-server.php:5821
 msgid "Could not write file %1$s (%2$s)"
 msgstr "לא ניתן לכתוב לקובץ %1$s (%2$s)"
@@ -6391,6 +6387,10 @@ msgstr "אין לך הרשאות לפרסם פוסט זה."
 #: wp-includes/class-wp-xmlrpc-server.php:3676
 msgid "Sorry, you are not allowed access to details of this post."
 msgstr "אין לך הרשאות לראות את פרטי הפוסט."
+
+#: wp-includes/class-wp-xmlrpc-server.php:3474
+msgid "Sorry, the comment could not be edited. Something wrong happened."
+msgstr "לא ניתן לערוך את התגובה. ארעה תקלה."
 
 #: wp-includes/class-wp-theme.php:783
 msgid "Gray"
@@ -7002,10 +7002,6 @@ msgstr "ראשי"
 msgid "Missing Attachment"
 msgstr "חסר קובץ מצורף"
 
-#: wp-includes/post-template.php:1689
-msgid "%1$s [Current Revision]"
-msgstr "%1$s [הגרסה הנוכחית]"
-
 #: wp-includes/post.php:2963
 msgid "Content, title, and excerpt are empty."
 msgstr "התוכן, הכותרת והתקציר ריקים."
@@ -7234,10 +7230,6 @@ msgstr "השם הזה תפוס כרגע, אבל אולי הוא יתפנה בע�
 #: wp-includes/ms-functions.php:961
 msgid "Invalid activation key."
 msgstr "קוד הפעלה שגוי."
-
-#: wp-includes/ms-functions.php:981
-msgid "Could not create user"
-msgstr "לא הצלחתי ליצור את המשתמש"
 
 #: wp-includes/ms-functions.php:989
 msgid "That username is already activated."
@@ -7829,6 +7821,14 @@ msgid_plural "%s days"
 msgstr[0] "יום %s"
 msgstr[1] "%s ימים"
 
+#: wp-includes/post-template.php:1689
+msgid "%1$s [Current Revision]"
+msgstr "%1$s [גרסה נוכחית]"
+
+#: wp-includes/ms-functions.php:981
+msgid "Could not create user"
+msgstr "לא ניתן ליצור את המשתמש"
+
 #: wp-includes/class-wp-theme.php:782
 msgid "Blue"
 msgstr "כחול"
@@ -8094,16 +8094,6 @@ msgstr "עריכה"
 msgid "<cite class=\"fn\">%s</cite> <span class=\"says\">says:</span>"
 msgstr "<span class=\"says\">מאת</span> <cite class=\"fn\">%s</cite>:"
 
-#: wp-includes/class-wp-xmlrpc-server.php:4706
-msgid "For some strange yet very annoying reason, this post could not be edited."
-msgstr "מסיבה כלשהי, לא ניתן לשמור שינויים בפוסט זה."
-
-#: wp-includes/class-wp-xmlrpc-server.php:1526
-#: wp-includes/class-wp-xmlrpc-server.php:4628
-#: wp-includes/class-wp-xmlrpc-server.php:5087
-msgid "Sorry, your entry could not be posted. Something wrong happened."
-msgstr "פרסום הפוסט נכשל."
-
 #: wp-includes/class-wp-xmlrpc-server.php:3550 wp-includes/comment.php:2805
 msgid "Sorry, comments are closed for this item."
 msgstr "פריט זה סגור לתגובות."
@@ -8178,6 +8168,16 @@ msgstr "פיד <abbr title=\"Really Simple Syndication\">RSS</abbr> לתגובו
 #: wp-includes/script-loader.php:601
 msgid "Plugin:"
 msgstr "תוסף:"
+
+#: wp-includes/class-wp-xmlrpc-server.php:1526
+#: wp-includes/class-wp-xmlrpc-server.php:4628
+#: wp-includes/class-wp-xmlrpc-server.php:5087
+msgid "Sorry, your entry could not be posted. Something wrong happened."
+msgstr "לא ניתן לפרסם את פוסט. ארעה תקלה."
+
+#: wp-includes/class-wp-xmlrpc-server.php:4706
+msgid "For some strange yet very annoying reason, this post could not be edited."
+msgstr "לא ניתן לערוך את הפוסט הזה."
 
 #: wp-includes/category-template.php:566
 #: wp-includes/theme-compat/sidebar.php:97

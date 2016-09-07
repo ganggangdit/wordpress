@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Administration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2016-08-16 20:59:12+0000\n"
+"PO-Revision-Date: 2016-08-24 16:48:31+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3808,7 +3808,7 @@ msgstr "Añade elementos de menú desde la columna de la izquierda."
 
 #: wp-admin/includes/plugin-install.php:213
 msgid "Plugins extend and expand the functionality of WordPress. You may automatically install plugins from the <a href=\"%1$s\">WordPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page."
-msgstr "Los plugins extienden y amplían las funcionalidades de WordPress. Puedes instalar automáticamente plugins del <a href=\"%1$s\">Directorio de Plugins de WordPress </a> o subir un plugin en formato Zip a través de <a href=\"%2$s\">esta página</a>."
+msgstr "Los plugins extienden y amplían las funcionalidades de WordPress. Puedes instalar automáticamente plugins del <a href=\"%1$s\">Directorio de Plugins de WordPress</a> o subir un plugin en formato Zip a través de esta página."
 
 #. Plugin URI of the plugin/theme
 msgid "http://wordpress.org/plugins/hello-dolly/"
@@ -6517,7 +6517,7 @@ msgstr "Escritura en la página de inicio"
 
 #: wp-admin/includes/theme.php:266
 msgid "Translation Ready"
-msgstr "Traducción lista"
+msgstr "Preparado para traducción"
 
 #: wp-admin/comment.php:64
 msgid "Sorry, you are not allowed to edit this comment."

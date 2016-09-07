@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Administration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2016-08-11 23:22:44+0000\n"
+"PO-Revision-Date: 2016-08-26 00:37:05+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3397,7 +3397,7 @@ msgstr "더 이상의 작업은 필요 없습니다."
 
 #: wp-admin/includes/class-wp-automatic-updater.php:657
 msgid "For more on version %s, see the About WordPress screen:"
-msgstr "버전 %s에 대한 더 많은 정보는 워드프레스에 관하여 화면을 참고하세요:"
+msgstr "버전 %s에 대한 더 많은 정보는 워드프레스 소개 화면을 참고하세요:"
 
 #: wp-admin/includes/class-wp-automatic-updater.php:670
 msgid "Please update your site at %1$s to WordPress %2$s."
@@ -4342,7 +4342,7 @@ msgstr "\"%s\" 옵션 그룹이 제거됐습니다. 다른 설정 그룹을 사�
 
 #: wp-admin/includes/update-core.php:1224 wp-admin/update-core.php:502
 msgid "Welcome to WordPress %1$s. You will be redirected to the About WordPress screen. If not, click <a href=\"%2$s\">here</a>."
-msgstr "워드프레스 %1$s에 오신 것을 환영합니다. \"워드프레스에 관하여\" 화면으로 안내될 것입니다. 아닌 경우 <a href=\"%2$s\">여기</a>를 클릭하세요."
+msgstr "워드프레스 %1$s에 오신 것을 환영합니다. \"워드프레스 소개\" 화면으로 안내될 것입니다. 아닌 경우 <a href=\"%2$s\">여기</a>를 클릭하세요."
 
 #: wp-admin/options-reading.php:25
 msgid "You can also control the display of your content in RSS feeds, including the maximum numbers of posts to display and whether to show full text or a summary."
@@ -5902,7 +5902,7 @@ msgstr "사이트 삭제"
 
 #: wp-admin/edit-form-advanced.php:390
 msgid "About Pages"
-msgstr "페이지에 관하여"
+msgstr "페이지 소개"
 
 #: wp-admin/edit-form-advanced.php:360
 msgid "Customizing This Display"
