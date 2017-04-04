@@ -17,7 +17,7 @@ $data_array = array(
 $wpdb->insert($table, $data_array);
 
 
-$sql = "SELECT user_name , user_message, FROM wp_weixin_stricky_note LIMIT 0,100";
+$sql = "SELECT user_name , user_message, FROM  {$table}  ORDER BY ctime DESC  LIMIT 0,100";
 
 $results = $wpdb->get_results($sql);
 print_r($results);
